@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Brand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#000;--text:#f2f2f2;--muted:#8a8a8a;--line:rgba(255,255,255,.14)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',Arial,sans-serif;overflow-x:hidden}
+a:focus-visible,button:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;overflow:hidden}
+.art{position:absolute;inset:0;pointer-events:none}
+.glow{position:absolute;width:80vmax;height:80vmax;left:50%;top:50%;margin:-40vmax 0 0 -40vmax;background:radial-gradient(circle,rgba(255,255,255,.1),transparent 60%);animation:pulse 9s ease-in-out infinite alternate}
+.ring{position:absolute;left:50%;top:50%;border:1px solid var(--line);border-radius:50%}
+.r1{width:92vmin;height:92vmin;margin:-46vmin 0 0 -46vmin;animation:spin 70s linear infinite}
+.r2{width:60vmin;height:60vmin;margin:-30vmin 0 0 -30vmin;border-style:dashed;animation:spin 100s linear infinite reverse}
+.beam{position:absolute;top:-20%;left:-10%;width:1px;height:140%;background:linear-gradient(transparent,rgba(255,255,255,.4),transparent);transform:rotate(25deg);animation:sweep 11s ease-in-out infinite alternate}
+.grain{position:absolute;inset:0;opacity:.09;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{from{opacity:.4;transform:scale(.9)}to{opacity:1;transform:scale(1.1)}}
+@keyframes sweep{from{left:-10%}to{left:110%}}
+
+.logo{position:relative;z-index:2;width:min(88vw,700px);height:auto;animation:reveal 1.8s cubic-bezier(.2,.7,.2,1) both}
+.tagline{position:relative;z-index:2;margin-top:28px;color:var(--muted);font-weight:300;font-size:1rem;animation:fade 1.4s .9s both}
+.cta{position:relative;z-index:2;margin-top:36px;border:1px solid var(--text);color:var(--text);text-decoration:none;padding:14px 34px;border-radius:99px;font-size:.95rem;transition:background .3s,color .3s;animation:fade 1.4s 1.2s both}
+.cta:hover{background:var(--text);color:#000}
+@keyframes reveal{from{opacity:0;filter:blur(16px);transform:scale(.95)}to{opacity:1;filter:blur(0);transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* SHOP */
+.shop{max-width:1000px;margin:0 auto;padding:90px 20px}
+.shop h2,.how h2{font-weight:300;font-size:clamp(1.8rem,6vw,2.6rem);margin-bottom:28px}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:24px}
+.tab{background:none;border:1px solid var(--line);color:var(--muted);padding:9px 18px;border-radius:99px;font:inherit;font-size:.85rem;cursor:pointer;white-space:nowrap;transition:.25s}
+.tab.on{background:var(--text);color:#000;border-color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:700px){.grid{grid-template-columns:repeat(3,1fr)}}
+.card{border:1px solid var(--line);border-radius:6px;overflow:hidden;animation:fade .5s both;transition:border-color .3s}
+.card:hover{border-color:rgba(255,255,255,.45)}
+.ph{aspect-ratio:4/5;background:linear-gradient(135deg,#111,#272727);display:flex;align-items:center;justify-content:center;color:#555;font-size:.8rem}
+.info{padding:14px}
+.gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.gal::-webkit-scrollbar{display:none}
+.gal img{flex:0 0 100%;width:100%;aspect-ratio:4/5;object-fit:cover;scroll-snap-align:center;display:block}
+.media{position:relative}
+.dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:6px;pointer-events:none}
+.dot{width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.4);transition:width .35s,background .35s}
+.dot.on{width:18px;background:#fff}
+.empty{grid-column:1/-1;color:var(--muted);padding:40px 0}
+.info .price{color:var(--text);font-weight:500;margin:6px 0 12px}
+.info h3{font-size:.95rem;font-weight:500}
+.info p{color:var(--muted);font-size:.85rem;margin:4px 0 0}
+.order{width:100%;background:none;border:1px solid var(--text);color:var(--text);padding:10px;border-radius:4px;font:inherit;font-size:.85rem;cursor:pointer;transition:.25s}
+.order:hover{background:var(--text);color:#000}
+
+/* HOW TO ORDER + FOOTER */
+.how{max-width:1000px;margin:0 auto;padding:30px 20px 90px;border-top:1px solid var(--line)}
+.how{padding-top:90px}
+.how ol{list-style:none;display:grid;gap:22px;max-width:520px}
+.how li{display:grid;grid-template-columns:36px 1fr;color:var(--muted);line-height:1.6}
+.how li b{color:var(--text);font-weight:500}
+.how li span{color:var(--text)}
+footer{border-top:1px solid var(--line);padding:32px 20px 48px;text-align:center;color:var(--muted);font-size:.85rem}
+footer button{margin-top:16px;background:var(--text);color:#000;border:0;padding:13px 30px;border-radius:99px;font:inherit;font-weight:500;cursor:pointer}
+
+.js .reveal{opacity:0;transform:translateY(20px);transition:opacity .9s ease,transform .9s ease}
+.js .reveal.show{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="art"><div class="glow"></div><div class="ring r1"></div><div class="ring r2"></div><div class="beam"></div><div class="grain"></div></div>
+  <img class="logo" src="logo.png" alt="The Brand">
+  <p class="tagline">Clothing, makeup, watches and bags.</p>
+  <a class="cta" href="#shop">Shop now</a>
+</section>
+
+<section class="shop" id="shop">
+  <h2 class="reveal">Collection</h2>
+  <div class="tabs reveal" id="tabs"></div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section class="how reveal" id="how">
+  <h2>How to order</h2>
+  <ol>
+    <li><span>1</span><div><b>Pick a product.</b> Tap Order on WhatsApp under it.</div></li>
+    <li><span>2</span><div><b>Send the message.</b> The product name is already filled in.</div></li>
+    <li><span>3</span><div><b>We confirm.</b> We tell you price, delivery time and payment options in the chat.</div></li>
+  </ol>
+</section>
+
+<footer>
+  <p>The Brand</p>
+  <button onclick="order('')">Chat on WhatsApp</button>
+</footer>
+
+<script>
+/* CHANGE HERE: business WhatsApp number, country code first, no + or spaces. Example: 8801712345678 */
+const WHATSAPP = "8801613714808";
+
+/* CHANGE HERE: products. n = name, c = categories, p = price, m = short details, imgs = photo files */
+const products = [
+  {n:"New Jacquard Landscape Painting Imitation Cashmere Shawl", c:["Winter","Boys","Girls"], p:"৳ 1100", m:"Imitation cashmere, 180×65 cm. In stock.", imgs:["shawl-1.jpg","shawl-2.jpg","shawl-3.jpg"]}
+];
+const cats = ["All","Boys","Girls","Winter","Summer","Makeup","Watch","Bag"];
+
+function order(p){
+  if(/X/.test(WHATSAPP)){alert("WhatsApp number is not set yet. Open index.html and change the WHATSAPP line.");return}
+  let msg = "Hello The Brand";
+  if(p){
+    msg = "Hello The Brand, I want to order:\n" + p.n + "\nPrice: " + p.p;
+    if(p.imgs && p.imgs.length) msg += "\nPhoto: " + new URL(p.imgs[0], location.href).href;
+  }
+  window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg), "_blank");
+}
+
+let timers = [];
+function slider(m, g, n){
+  const dots = document.createElement("div");
+  dots.className = "dots";
+  for(let k = 0; k < n; k++){const d = document.createElement("span");d.className = "dot";dots.appendChild(d)}
+  m.appendChild(dots);
+  let idx = 0, pause = 0;
+  const mark = () => {idx = Math.round(g.scrollLeft / g.clientWidth);[...dots.children].forEach((d, k) => d.classList.toggle("on", k === idx))};
+  g.addEventListener("scroll", mark);
+  ["touchstart","mousedown"].forEach(ev => g.addEventListener(ev, () => {pause = Date.now() + 6000}, {passive:true}));
+  mark();
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  timers.push(setInterval(() => {
+    if(Date.now() < pause) return;
+    idx = (idx + 1) % n;
+    g.scrollTo({left: idx * g.clientWidth, behavior: "smooth"});
+  }, 3000));
+}
+
+const grid = document.getElementById("grid");
+const tabs = document.getElementById("tabs");
+
+function show(cat){
+  timers.forEach(clearInterval);timers = [];
+  grid.innerHTML = "";
+  const list = products.filter(x => cat === "All" || x.c.includes(cat));
+  if(!list.length){grid.innerHTML = '<p class="empty">Coming soon.</p>'}
+  list.forEach(x => {
+    const d = document.createElement("div");
+    d.className = "card";
+    d.innerHTML = '<div class="media"></div><div class="info"><h3></h3><p class="meta"></p><p class="price"></p><button class="order">Order on WhatsApp</button></div>';
+    const m = d.querySelector(".media");
+    if(x.imgs && x.imgs.length){
+      m.className = "media";
+      const g = document.createElement("div");
+      g.className = "gal";
+      x.imgs.forEach(src => {const i = document.createElement("img");i.src = src;i.alt = x.n;i.loading = "lazy";g.appendChild(i)});
+      m.appendChild(g);
+      if(x.imgs.length > 1) slider(m, g, x.imgs.length);
+    } else {m.className = "ph";m.textContent = "Photo coming"}
+    d.querySelector("h3").textContent = x.n;
+    d.querySelector(".meta").textContent = x.m || "";
+    d.querySelector(".price").textContent = x.p;
+    d.querySelector("button").onclick = () => order(x);
+    grid.appendChild(d);
+  });
+  [...tabs.children].forEach(b => b.classList.toggle("on", b.textContent === cat));
+}
+
+cats.forEach(c => {
+  const b = document.createElement("button");
+  b.className = "tab";
+  b.textContent = c;
+  b.onclick = () => show(c);
+  tabs.appendChild(b);
+});
+show("All");
+
+document.documentElement.classList.add("js");
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if(e.isIntersecting){e.target.classList.add("show");io.unobserve(e.target)}
+}), {threshold:.15});
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+</script>
+</body>
+</html>
