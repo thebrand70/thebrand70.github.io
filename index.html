@@ -46,6 +46,10 @@ a:focus-visible,button:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .card:hover{border-color:rgba(255,255,255,.45)}
 .ph{aspect-ratio:4/5;background:linear-gradient(135deg,#111,#272727);display:flex;align-items:center;justify-content:center;color:#555;font-size:.8rem}
 .info{padding:14px}
+.media{position:relative}
+.dots{position:absolute;bottom:10px;left:0;right:0;display:flex;justify-content:center;gap:6px;pointer-events:none}
+.dot{width:6px;height:6px;border-radius:99px;background:rgba(255,255,255,.4);transition:width .35s,background .35s}
+.dot.on{width:18px;background:#fff}
 .gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
 .gal::-webkit-scrollbar{display:none}
 .gal img{flex:0 0 100%;width:100%;aspect-ratio:4/5;object-fit:cover;scroll-snap-align:center;display:block}
@@ -101,25 +105,49 @@ footer button{margin-top:16px;background:var(--text);color:#000;border:0;padding
 </footer>
 
 <script>
-/* CHANGE HERE: business WhatsApp number, country code first, no + or spaces. Example: 8801712345678 */
+/* CHANGE HERE: business WhatsApp number, country code first, no + or spaces */
 const WHATSAPP = "8801613714808";
 
 /* CHANGE HERE: products. n = name, c = categories, p = price, m = short details, imgs = photo files */
 const products = [
-  {n:"New Jacquard Landscape Painting Imitation Cashmere Shawl", c:["Winter","Boys","Girls"], p:"৳ 1100", m:"Imitation cashmere, 180×65 cm. In stock.", imgs:["shawl-1.jpg","shawl-2.jpg","shawl-3.jpg"]}
+  {n:"New Jacquard Landscape Painting Imitation Cashmere Shawl", c:["Winter","Boys","Girls"], p:"৳ 1100", m:"Imitation cashmere, 180×65 cm. In stock.", imgs:["shawl-1.jpg","shawl-2.jpg"]}
 ];
 const cats = ["All","Boys","Girls","Winter","Summer","Makeup","Watch","Bag"];
 
-function order(name){
+function order(p){
   if(/X/.test(WHATSAPP)){alert("WhatsApp number is not set yet. Open index.html and change the WHATSAPP line.");return}
-  const msg = name ? "Hello The Brand, I want to order: " + name : "Hello The Brand";
+  let msg = "Hello The Brand";
+  if(p){
+    msg = "Hello The Brand, I want to order:\n" + p.n + "\nPrice: " + p.p;
+    if(p.imgs && p.imgs.length) msg += "\nPhoto: " + new URL(p.imgs[0], location.href).href;
+  }
   window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg), "_blank");
+}
+
+let timers = [];
+function slider(m, g, n){
+  const dots = document.createElement("div");
+  dots.className = "dots";
+  for(let k = 0; k < n; k++){const d = document.createElement("span");d.className = "dot";dots.appendChild(d)}
+  m.appendChild(dots);
+  let idx = 0, pause = 0;
+  const mark = () => {idx = Math.round(g.scrollLeft / g.clientWidth);[...dots.children].forEach((d, k) => d.classList.toggle("on", k === idx))};
+  g.addEventListener("scroll", mark);
+  ["touchstart","mousedown"].forEach(ev => g.addEventListener(ev, () => {pause = Date.now() + 6000}, {passive:true}));
+  mark();
+  if(window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  timers.push(setInterval(() => {
+    if(Date.now() < pause) return;
+    idx = (idx + 1) % n;
+    g.scrollTo({left: idx * g.clientWidth, behavior: "smooth"});
+  }, 3000));
 }
 
 const grid = document.getElementById("grid");
 const tabs = document.getElementById("tabs");
 
 function show(cat){
+  timers.forEach(clearInterval);timers = [];
   grid.innerHTML = "";
   const list = products.filter(x => cat === "All" || x.c.includes(cat));
   if(!list.length){grid.innerHTML = '<p class="empty">Coming soon.</p>'}
@@ -129,13 +157,17 @@ function show(cat){
     d.innerHTML = '<div class="media"></div><div class="info"><h3></h3><p class="meta"></p><p class="price"></p><button class="order">Order on WhatsApp</button></div>';
     const m = d.querySelector(".media");
     if(x.imgs && x.imgs.length){
-      m.className = "gal";
-      x.imgs.forEach(src => {const i = document.createElement("img");i.src = src;i.alt = x.n;i.loading = "lazy";m.appendChild(i)});
+      m.className = "media";
+      const g = document.createElement("div");
+      g.className = "gal";
+      x.imgs.forEach(src => {const i = document.createElement("img");i.src = src;i.alt = x.n;i.loading = "lazy";g.appendChild(i)});
+      m.appendChild(g);
+      if(x.imgs.length > 1) slider(m, g, x.imgs.length);
     } else {m.className = "ph";m.textContent = "Photo coming"}
     d.querySelector("h3").textContent = x.n;
     d.querySelector(".meta").textContent = x.m || "";
     d.querySelector(".price").textContent = x.p;
-    d.querySelector("button").onclick = () => order(x.n);
+    d.querySelector("button").onclick = () => order(x);
     grid.appendChild(d);
   });
   [...tabs.children].forEach(b => b.classList.toggle("on", b.textContent === cat));
