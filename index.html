@@ -46,8 +46,13 @@ a:focus-visible,button:focus-visible{outline:2px solid #fff;outline-offset:3px}
 .card:hover{border-color:rgba(255,255,255,.45)}
 .ph{aspect-ratio:4/5;background:linear-gradient(135deg,#111,#272727);display:flex;align-items:center;justify-content:center;color:#555;font-size:.8rem}
 .info{padding:14px}
+.gal{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.gal::-webkit-scrollbar{display:none}
+.gal img{flex:0 0 100%;width:100%;aspect-ratio:4/5;object-fit:cover;scroll-snap-align:center;display:block}
+.empty{grid-column:1/-1;color:var(--muted);padding:40px 0}
+.info .price{color:var(--text);font-weight:500;margin:6px 0 12px}
 .info h3{font-size:.95rem;font-weight:500}
-.info p{color:var(--muted);font-size:.85rem;margin:4px 0 12px}
+.info p{color:var(--muted);font-size:.85rem;margin:4px 0 0}
 .order{width:100%;background:none;border:1px solid var(--text);color:var(--text);padding:10px;border-radius:4px;font:inherit;font-size:.85rem;cursor:pointer;transition:.25s}
 .order:hover{background:var(--text);color:#000}
 
@@ -97,17 +102,11 @@ footer button{margin-top:16px;background:var(--text);color:#000;border:0;padding
 
 <script>
 /* CHANGE HERE: business WhatsApp number, country code first, no + or spaces. Example: 8801712345678 */
-const WHATSAPP = "8801613714808";
+const WHATSAPP = "8801XXXXXXXXX";
 
-/* CHANGE HERE: sample products. Replace name and price with real ones. */
+/* CHANGE HERE: products. n = name, c = categories, p = price, m = short details, imgs = photo files */
 const products = [
-  {n:"Sample Boys Shirt", c:"Boys", p:"৳ 000"},
-  {n:"Sample Girls Dress", c:"Girls", p:"৳ 000"},
-  {n:"Sample Winter Hoodie", c:"Winter", p:"৳ 000"},
-  {n:"Sample Summer Tee", c:"Summer", p:"৳ 000"},
-  {n:"Sample Lip Tint", c:"Makeup", p:"৳ 000"},
-  {n:"Sample Watch", c:"Watch", p:"৳ 000"},
-  {n:"Sample Bag", c:"Bag", p:"৳ 000"}
+  {n:"New Jacquard Landscape Painting Imitation Cashmere Shawl", c:["Winter","Boys","Girls"], p:"৳ 1100", m:"Imitation cashmere, 180×65 cm. In stock.", imgs:["shawl-1.jpg","shawl-2.jpg","shawl-3.jpg"]}
 ];
 const cats = ["All","Boys","Girls","Winter","Summer","Makeup","Watch","Bag"];
 
@@ -122,12 +121,20 @@ const tabs = document.getElementById("tabs");
 
 function show(cat){
   grid.innerHTML = "";
-  products.filter(x => cat === "All" || x.c === cat).forEach(x => {
+  const list = products.filter(x => cat === "All" || x.c.includes(cat));
+  if(!list.length){grid.innerHTML = '<p class="empty">Coming soon.</p>'}
+  list.forEach(x => {
     const d = document.createElement("div");
     d.className = "card";
-    d.innerHTML = '<div class="ph">Photo coming</div><div class="info"><h3></h3><p></p><button class="order">Order on WhatsApp</button></div>';
+    d.innerHTML = '<div class="media"></div><div class="info"><h3></h3><p class="meta"></p><p class="price"></p><button class="order">Order on WhatsApp</button></div>';
+    const m = d.querySelector(".media");
+    if(x.imgs && x.imgs.length){
+      m.className = "gal";
+      x.imgs.forEach(src => {const i = document.createElement("img");i.src = src;i.alt = x.n;i.loading = "lazy";m.appendChild(i)});
+    } else {m.className = "ph";m.textContent = "Photo coming"}
     d.querySelector("h3").textContent = x.n;
-    d.querySelector("p").textContent = x.p;
+    d.querySelector(".meta").textContent = x.m || "";
+    d.querySelector(".price").textContent = x.p;
     d.querySelector("button").onclick = () => order(x.n);
     grid.appendChild(d);
   });
